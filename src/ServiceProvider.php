@@ -31,6 +31,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 return new Manager($app, $client, $oauth, config('larazan.kdtId'));
             }
         });
+        $this->app->alias(Manager::class, 'larazan');
     }
 
     /**
