@@ -1,0 +1,21 @@
+{
+    "name": "dezsidog/larazan",
+    "description": "youzan sdk for laravel",
+    "license": "WTFPL",
+    "authors": [
+        {
+            "name": "zed",
+            "email": "zedsmail@163.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "dezsidog/youzanphp": "dev-develop",
+        "laravel/framework": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dezsidog\\LYouzanphp\\": "src"
+        }
+    }
+}
