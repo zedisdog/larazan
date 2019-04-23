@@ -9,7 +9,6 @@ namespace Dezsidog\LYouzanphp;
 use Dezsidog\Youzanphp\Client\Client;
 use Dezsidog\Youzanphp\Oauth2\Oauth;
 use Illuminate\Foundation\Application;
-use Illuminate\Routing\Router;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -26,9 +25,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $oauth = new Oauth(config('larazan.clientId'), config('larazan.clientSecret'));
             $client = new Client();
             if (config('larazan.multiSeller')) {
-                return new Manager($app, $client, $oauth);
+                return new Manager($app, $client, $oauth, 0, $app->make('cache')->getStore());
             } else {
-                return new Manager($app, $client, $oauth, config('larazan.kdtId'));
+                return new Manager($app, $client, $oauth, config('larazan.kdtId'), $app->make('cache')->getStore());
             }
         });
         $this->app->alias(Manager::class, 'larazan');

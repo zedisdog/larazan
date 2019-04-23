@@ -102,8 +102,8 @@ class Manager
             throw new NoStoreException('no store, no cache');
         }
         $this->shopId = $shopId;
-        $tokenKey = $this->getTokenCacheKey($shopId);
-        $refreshTokenKey = $this->getRefreshTokenCacheKey($shopId);
+        $tokenKey = $this->getTokenCacheKey();
+        $refreshTokenKey = $this->getRefreshTokenCacheKey();
 
         if (!$this->store->get($tokenKey)) {
             if (config('larazan.multiSeller') === false) {
@@ -141,6 +141,7 @@ class Manager
             $redirectUri = config('larazan.redirectUri');
         }
         $token = $this->oauthClient->requestToken($code, $redirectUri);
+        $this->shopId = $token['authority_id'];
         if ($this->store) {
             $this->cacheToken($token);
         }
@@ -154,6 +155,7 @@ class Manager
      */
     public function exchangeTokenByRefreshToken(string $refreshToken) {
         $token = $this->oauthClient->refreshToken($refreshToken);
+        $this->shopId = $token['authority_id'];
         if ($this->store) {
             $this->cacheToken($token);
         }
@@ -178,8 +180,8 @@ class Manager
                 $token['refresh_expires'] = $this->refreshTokenExpires/60;
             }
         }
-        $tokenKey = $this->getTokenCacheKey($token['authority_id']);
-        $refreshTokenKey = $this->getRefreshTokenCacheKey($token['authority_id']);
+        $tokenKey = $this->getTokenCacheKey();
+        $refreshTokenKey = $this->getRefreshTokenCacheKey();
 
         $this->store->put($tokenKey, $token['access_token'], $token['expires']);
         if (config('larazan.multiSeller')) {
@@ -187,14 +189,14 @@ class Manager
         }
     }
 
-    public function getTokenCacheKey(int $shopId): string
+    public function getTokenCacheKey(): string
     {
-        return sprintf('%s.token.%s', self::TOKEN_CACHE_BASE_KEY, $shopId);
+        return sprintf('%s.token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
     }
 
-    public function getRefreshTokenCacheKey(int $shopId): string
+    public function getRefreshTokenCacheKey(): string
     {
-        return sprintf('%s.refresh_token.%s', self::TOKEN_CACHE_BASE_KEY, $shopId);
+        return sprintf('%s.refresh_token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
     }
 
     /**
