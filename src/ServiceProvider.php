@@ -22,8 +22,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->app->singleton(Manager::class,function(Application $app){
-            $oauth = new Oauth(config('larazan.clientId'), config('larazan.clientSecret'));
-            $client = new Client();
+            $oauth = new Oauth(config('larazan.clientId'), config('larazan.clientSecret'), $app->make('log'));
+            $client = new Client('', $app->make('log'));
             if (config('larazan.multiSeller')) {
                 return new Manager($app, $client, $oauth, 0, $app->make('cache')->getStore());
             } else {
