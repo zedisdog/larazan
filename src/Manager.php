@@ -93,6 +93,13 @@ class Manager
     }
 
     /**
+     * @return int
+     */
+    public function getShopId(): int
+    {
+        return $this->shopId;
+    }
+    /**
      * @param int $shopId
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
