@@ -108,7 +108,7 @@ class Manager
         if (!$this->store && config('larazan.multiSeller')) {
             throw new NoStoreException('no store, no cache');
         }
-        $this->shopId = $shopId;
+        $this->shopId = intval($shopId);
         $tokenKey = $this->getTokenCacheKey();
         $refreshTokenKey = $this->getRefreshTokenCacheKey();
 
@@ -148,7 +148,7 @@ class Manager
             $redirectUri = config('larazan.redirectUri');
         }
         $token = $this->oauthClient->requestToken($code, $redirectUri);
-        $this->shopId = $token['authority_id'];
+        $this->shopId = intval($token['authority_id']);
         if ($this->store) {
             $this->cacheToken($token);
         }
@@ -162,7 +162,7 @@ class Manager
      */
     public function exchangeTokenByRefreshToken(string $refreshToken) {
         $token = $this->oauthClient->refreshToken($refreshToken);
-        $this->shopId = $token['authority_id'];
+        $this->shopId = intval($token['authority_id']);
         if ($this->store) {
             $this->cacheToken($token);
         }
