@@ -17,5 +17,12 @@
         "psr-4": {
             "Dezsidog\\LYouzanphp\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dezsidog\\LYouzanphp\\ServiceProvider"
+            ]
+        }
     }
 }
