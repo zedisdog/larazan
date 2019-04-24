@@ -28,6 +28,7 @@ use Illuminate\Contracts\Container\Container;
  * @method array|null getSalesman(string $mobile, int $fansType = 0, int $fansId = 0, string $version = '3.0.1')
  * @method string|null getPhoneByTrade(string $tradeId, string $version = '3.0.0')
  * @method array|null addTags(int $id, string $tags, $version = '3.0.0')
+ * @method array|null itemSearch(string $keyword,int $pageNo = 1,int $pageSize = 100,?int $showSoldOut = null,$version = '3.0.0')
  * @method bool|null addCostumerTags(string $accountType, string $accountId, array $tags, string $version = '4.0.0')
  * @method array|null getOpenIdByPhone(string $mobile, string $countryCode = '86', string $version = '3.0.0')
  * @method array|null getShopInfo(string $version = '3.0.0')
