@@ -22,6 +22,7 @@ use Illuminate\Contracts\Container\Container;
 /**
  * Class Manager
  * @package Dezsidog\LYouzanphp
+ * @method void dontReportAll()
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
  * @method bool|null pointIncrease(string $accountId, int $accountType, int $points, string $reason, string $bizValue = '', string $version = '3.1.0')
  * @method array|null getSalesman(string $mobile, int $fansType = 0, int $fansId = 0, string $version = '3.0.1')
