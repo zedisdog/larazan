@@ -12,12 +12,12 @@ use Illuminate\Foundation\Application;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    /**
-     * 标记着提供器是延迟加载的
-     *
-     * @var bool
-     */
-    protected $defer = true;
+//    /**
+//     * 标记着提供器是延迟加载的
+//     *
+//     * @var bool
+//     */
+//    protected $defer = true;
 
     public function register()
     {
