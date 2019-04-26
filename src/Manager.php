@@ -129,6 +129,12 @@ class Manager
         }
     }
 
+    public function getAccessToken()
+    {
+        $tokenKey = $this->getTokenCacheKey();
+        return $this->store->get($tokenKey);
+    }
+
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
