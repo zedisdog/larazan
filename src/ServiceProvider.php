@@ -46,11 +46,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config.php', 'larazan');
 
         $router = $this->app->make('router');
-//        if (config('larazan.callback')) {
-//            $router->prefix(config('larazan.callback.prefix', 'api'))
-//                ->middleware(config('larazan.callback.middlewares', 'api'))
-//                ->any(config('larazan.callback.url', 'yz-callback'), config('larazan.callback.class'));
-//        }
+        $router->prefix(config('larazan.callback.prefix', 'api'))
+            ->middleware(config('larazan.callback.middlewares', 'api'))
+            ->any(config('larazan.callback.url', 'yz-callback'), config('larazan.callback.action'));
         $router->prefix(config('larazan.hook.prefix', 'api'))
             ->middleware(config('larazan.hook.middlewares'), 'api')
             ->any(config('larazan.hook.url'), config('larazan.hook.action'));

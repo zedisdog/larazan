@@ -21,7 +21,7 @@ class HookController extends Controller
      * @return string
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function handler(Request $request)
+    public function __invoke(Request $request)
     {
         $log = app()->make('log');
         $log->info('yz-message-receive', $request->input() ?? []);
