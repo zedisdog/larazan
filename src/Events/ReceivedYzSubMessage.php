@@ -11,7 +11,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class ReceivedYzCallbackMessage
+class ReceivedYzSubMessage
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
