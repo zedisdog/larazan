@@ -17,6 +17,8 @@ class CallbackController
 {
     public function __invoke(Request $request)
     {
+        $log = app()->make('log');
+        $log->info('yz-callback-receive', $request->input() ?? []);
         if ($request->has('code')) {
             event(new ReceivedYzCode($request->input('code', '')));
         } elseif ($request->has('message')) {
