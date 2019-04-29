@@ -8,8 +8,6 @@ namespace Dezsidog\LYouzanphp;
 
 use Dezsidog\Youzanphp\Api\Client;
 use Dezsidog\Youzanphp\Oauth2\Oauth;
-use Illuminate\Cache\CacheManager;
-use Illuminate\Filesystem\Cache;
 use Illuminate\Foundation\Application;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
