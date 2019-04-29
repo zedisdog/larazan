@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Dezsidog\LYouzanphp\Exceptions\MethodNotFoundException;
 use Dezsidog\LYouzanphp\Exceptions\NoCacheException;
 use Dezsidog\LYouzanphp\Exceptions\NoStoreException;
-use Dezsidog\Youzanphp\Client\Client;
+use Dezsidog\Youzanphp\Api\Client;
 use Dezsidog\Youzanphp\Exceptions\BaseGatewayException;
 use Dezsidog\Youzanphp\Exceptions\TokenException;
 use Dezsidog\Youzanphp\Oauth2\Oauth;
@@ -23,6 +23,8 @@ use Illuminate\Contracts\Container\Container;
  * Class Manager
  * @package Dezsidog\LYouzanphp
  * @method void dontReportAll()
+ * @method string getClientId()
+ * @method string getClientSecret()
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
  * @method bool|null pointIncrease(string $accountId, int $accountType, int $points, string $reason, string $bizValue = '', string $version = '3.1.0')
  * @method array|null getSalesman(string $mobile, int $fansType = 0, int $fansId = 0, string $version = '3.0.1')
@@ -81,6 +83,7 @@ class Manager
      * @param Container $app
      * @param Client $client
      * @param Oauth $oauth
+     * @param int $shopId
      * @param Store|null $store
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -181,7 +184,6 @@ class Manager
 
     /**
      * @param array|null $token
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function cacheToken(?array $token)
     {
@@ -241,6 +243,8 @@ class Manager
                     throw $e;
                 }
             }
+        } elseif (method_exists($this->oauthClient, $name)) {
+            return $this->oauthClient->$name(...$arguments);
         } else {
             throw new MethodNotFoundException(sprintf('method [%s] with params [%s] not found', $name, implode(',', $arguments)));
         }
