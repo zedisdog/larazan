@@ -18,11 +18,11 @@ use Dezsidog\Youzanphp\Oauth2\Oauth;
 use Illuminate\Console\Application;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Log\Logger;
 
 /**
  * Class Manager
  * @package Dezsidog\LYouzanphp
- * @method void dontReportAll()
  * @method string getClientId()
  * @method string getClientSecret()
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
@@ -77,6 +77,10 @@ class Manager
      * @var int
      */
     protected $shopId;
+    /**
+     * @var bool
+     */
+    protected $dontReportAll;
 
     /**
      * Manager constructor.
@@ -97,6 +101,12 @@ class Manager
             $this->setShopId($shopId);
         }
         $this->refreshTokenExpires = config('larazan.refreshTokenExpires');
+    }
+
+    public function dontReportAll()
+    {
+        $this->dontReportAll = true;
+        $this->client->dontReportAll();
     }
 
     /**
@@ -123,7 +133,13 @@ class Manager
             if (config('larazan.multiSeller') === false) {
                 $this->exchangeTokenSilent();
             } elseif (!$this->store->get($refreshTokenKey)) {
-                throw new NoCacheException('specific shop has no cache');
+                if (!$this->dontReportAll) {
+                    throw new NoCacheException('specific shop has no cache');
+                } else {
+                    /** @var Logger $logger */
+                    $logger = $this->app->make('log');
+                    $logger->warning('specific shop has no cache', ['shop_id' => $shopId]);
+                }
             } else {
                 $this->exchangeTokenByRefreshToken($this->store->get($refreshTokenKey));
             }
