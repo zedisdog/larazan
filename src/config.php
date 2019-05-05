@@ -5,14 +5,11 @@
 return [
     'redirectUri' => '',
     'refreshTokenExpires' => 28*24*60*60,
-    'clients' => [
-        'default' => [
-            'clientId' => env('YZ_CLIENT_ID', ""),
-            'clientSecret' => env('YZ_CLIENT_SECRET', ""),
-        ]
-    ],
+    'clientId' => env('YZ_CLIENT_ID', ""),
+    'clientSecret' => env('YZ_CLIENT_SECRET', ""),
     'kdtId' => env('YZ_KDT_ID', ""),
     'multiSeller' => true,
+    'tag' => '',
     'hook' => [
         'prefix' => 'api',
         'middlewares' => 'api',
