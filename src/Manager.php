@@ -85,11 +85,6 @@ class Manager
      * @var LoggerInterface
      */
     protected $logger;
-    /**
-     * 保存token时 如果要分组就给tag 这样能支持多个应用保存token
-     * @var string
-     */
-    protected $tag = '';
 
     /**
      * Manager constructor.
@@ -98,17 +93,15 @@ class Manager
      * @param Oauth $oauth
      * @param int $shopId
      * @param Store|null $store
-     * @param string $tag
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct(Container $app, Client $client, Oauth $oauth, int $shopId = 0, ?Store $store = null, string $tag = '')
+    public function __construct(Container $app, Client $client, Oauth $oauth, int $shopId = 0, ?Store $store = null)
     {
         $this->app = $app;
         $this->store = $store;
         $this->client = $client;
         $this->oauthClient = $oauth;
         $this->logger = $this->app->make('log');
-        $this->tag = $tag;
         if ($shopId) {
             $this->setShopId($shopId);
         }
@@ -239,24 +232,14 @@ class Manager
 
     public function getTokenCacheKey(): string
     {
-        // 添加对多个应用的支持 自己设置tag 分开保存token
-        $key = sprintf('%s.token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
-        if ($this->tag) {
-            return $this->tag . '.' . $key;
-        } else {
-            return $key;
-        }
+        // 根据client id 分组 支持多应用
+        return sprintf('%s.%s.token.%s', $this->oauthClient->getClientId(), self::TOKEN_CACHE_BASE_KEY, $this->shopId);
     }
 
     public function getRefreshTokenCacheKey(): string
     {
-        // 添加对多个应用的支持 自己设置tag 分开保存refresh_token
-        $key = sprintf('%s.refresh_token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
-        if ($this->tag) {
-            return $this->tag . '.' . $key;
-        } else {
-            return $key;
-        }
+        // 根据client id 分组 支持多应用
+        return sprintf('%s.%s.refresh_token.%s', $this->oauthClient->getClientId(), self::TOKEN_CACHE_BASE_KEY, $this->shopId);
     }
 
     /**

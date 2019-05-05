@@ -26,16 +26,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 'clientId' => config('larazan.clientId'),
                 'clientSecret' => config('larazan.clientSecret'),
                 'kdtId' => config('larazan.kdtId'),
-                'multiSeller' => config('larazan.multiSeller'),
-                'tag' => config('larazan.tag')
+                'multiSeller' => config('larazan.multiSeller')
             ];
             $config = array_merge($defaultConfig, $config);
             $oauth = new Oauth($config['clientId'], $config['clientSecret'], $app->make('log'));
             $client = new Client('', $app->make('log'));
             if ($config['multiSeller']) {
-                return new Manager($app, $client, $oauth, 0, $app->make('cache')->getStore(), $config['tag']);
+                return new Manager($app, $client, $oauth, 0, $app->make('cache')->getStore());
             } else {
-                return new Manager($app, $client, $oauth, $config['kdtId'], $app->make('cache')->getStore(), $config['tag']);
+                return new Manager($app, $client, $oauth, $config['kdtId'], $app->make('cache')->getStore());
             }
         });
         $this->app->alias(Manager::class, 'larazan');
