@@ -27,7 +27,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 'clientSecret' => config('larazan.clientSecret'),
                 'kdtId' => config('larazan.kdtId'),
                 'multiSeller' => config('larazan.multiSeller'),
-                'tag' => ''
+                'tag' => config('larazan.tag')
             ];
             $config = array_merge($defaultConfig, $config);
             $oauth = new Oauth($config['clientId'], $config['clientSecret'], $app->make('log'));
