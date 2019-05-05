@@ -18,7 +18,7 @@ use Dezsidog\Youzanphp\Oauth2\Oauth;
 use Illuminate\Console\Application;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Log\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Manager
@@ -81,6 +81,15 @@ class Manager
      * @var bool
      */
     protected $dontReportAll;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+    /**
+     * 保存token时 如果要分组就给tag 这样能支持多个应用保存token
+     * @var string
+     */
+    protected $tag = '';
 
     /**
      * Manager constructor.
@@ -89,14 +98,17 @@ class Manager
      * @param Oauth $oauth
      * @param int $shopId
      * @param Store|null $store
+     * @param string $tag
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct(Container $app, Client $client, Oauth $oauth, int $shopId = 0, ?Store $store = null)
+    public function __construct(Container $app, Client $client, Oauth $oauth, int $shopId = 0, ?Store $store = null, string $tag = '')
     {
         $this->app = $app;
         $this->store = $store;
         $this->client = $client;
         $this->oauthClient = $oauth;
+        $this->logger = $this->app->make('log');
+        $this->tag = $tag;
         if ($shopId) {
             $this->setShopId($shopId);
         }
@@ -136,9 +148,7 @@ class Manager
                 if (!$this->dontReportAll) {
                     throw new NoCacheException('specific shop has no cache');
                 } else {
-                    /** @var Logger $logger */
-                    $logger = $this->app->make('log');
-                    $logger->warning('specific shop has no cache', ['shop_id' => $shopId]);
+                    $this->logger->warning('specific shop has no cache', ['shop_id' => $shopId]);
                 }
             } else {
                 $this->exchangeTokenByRefreshToken($this->store->get($refreshTokenKey));
@@ -203,6 +213,9 @@ class Manager
      */
     protected function cacheToken(?array $token)
     {
+        if (!$token) {
+            $this->logger->warning('no token data received');
+        }
         // 自用型授权没有refresh_token
         if ($this->app->version() < '5.8') {
             $token['expires'] = intval($token['expires']/1000/60);
@@ -226,12 +239,24 @@ class Manager
 
     public function getTokenCacheKey(): string
     {
-        return sprintf('%s.token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
+        // 添加对多个应用的支持 自己设置tag 分开保存token
+        $key = sprintf('%s.token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
+        if ($this->tag) {
+            return $this->tag . '.' . $key;
+        } else {
+            return $key;
+        }
     }
 
     public function getRefreshTokenCacheKey(): string
     {
-        return sprintf('%s.refresh_token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
+        // 添加对多个应用的支持 自己设置tag 分开保存refresh_token
+        $key = sprintf('%s.refresh_token.%s', self::TOKEN_CACHE_BASE_KEY, $this->shopId);
+        if ($this->tag) {
+            return $this->tag . '.' . $key;
+        } else {
+            return $key;
+        }
     }
 
     /**

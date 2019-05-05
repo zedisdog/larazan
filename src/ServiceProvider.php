@@ -22,15 +22,17 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->app->bind(Manager::class,function(Application $app, array $config = []){
-            if (empty($config)) {
-                $config = ['client' => 'default'];
-            }
+            $defaultConfig = [
+                'client' => 'default',
+                'tag' => ''
+            ];
+            $config = array_merge($defaultConfig, $config);
             $oauth = new Oauth(config('larazan.clients.' . $config['client'] . '.clientId'), config('larazan.clients.' . $config['client'] . '.clientSecret'), $app->make('log'));
             $client = new Client('', $app->make('log'));
             if (config('larazan.multiSeller')) {
-                return new Manager($app, $client, $oauth, 0, $app->make('cache')->getStore());
+                return new Manager($app, $client, $oauth, 0, $app->make('cache')->getStore(), $config['tag']);
             } else {
-                return new Manager($app, $client, $oauth, config('larazan.kdtId'), $app->make('cache')->getStore());
+                return new Manager($app, $client, $oauth, config('larazan.kdtId'), $app->make('cache')->getStore(), $config['tag']);
             }
         });
         $this->app->alias(Manager::class, 'larazan');
