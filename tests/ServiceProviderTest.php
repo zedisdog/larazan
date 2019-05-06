@@ -2,8 +2,8 @@
 
 
 use Orchestra\Testbench\TestCase;
-use Dezsidog\LYouzanphp\ServiceProvider;
-use \Dezsidog\LYouzanphp\Manager;
+use Dezsidog\Larazan\ServiceProvider;
+use \Dezsidog\Larazan\Manager;
 
 class ServiceProviderTest extends TestCase
 {
@@ -15,15 +15,9 @@ class ServiceProviderTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
-        $app['config']->set('larazan.clients', [
-            'default' => [
-                'clientId' => 'test1',
-                'clientSecret' => 'secret1',
-            ],
-            'sec' => [
-                'clientId' => 'test2',
-                'clientSecret' => 'secret2'
-            ]
+        $app['config']->set('larazan', [
+            'clientId' => 'test1',
+            'clientSecret' => 'secret1',
         ]);
     }
 
@@ -38,7 +32,7 @@ class ServiceProviderTest extends TestCase
     public function testMakeWithAnotherClientConfig()
     {
         /** @var Manager $sdk */
-        $sdk = $this->app->make(Manager::class, ['client' => 'sec']);
+        $sdk = $this->app->make(Manager::class, ['clientId' => 'test2', 'clientSecret' => 'secret2']);
         $this->assertEquals('test2', $sdk->getClientId());
         $this->assertEquals('secret2', $sdk->getClientSecret());
     }

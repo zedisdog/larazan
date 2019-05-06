@@ -3,12 +3,12 @@
  * Created by zed.
  */
 
-namespace Dezsidog\LYouzanphp\Http;
+namespace Dezsidog\Larazan\Http;
 
 
-use Dezsidog\LYouzanphp\Events\ReceivedYzSubMessage;
-use Dezsidog\LYouzanphp\Events\ReceivedYzCode;
-use Dezsidog\LYouzanphp\Events\ReceivedYzBindMessage;
+use Dezsidog\Larazan\Events\ReceivedYzSubMessage;
+use Dezsidog\Larazan\Events\ReceivedYzCode;
+use Dezsidog\Larazan\Events\ReceivedYzBindMessage;
 use Dezsidog\Youzanphp\Sec\Decrypter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

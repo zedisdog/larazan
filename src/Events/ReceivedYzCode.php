@@ -4,7 +4,7 @@
  */
 
 declare(strict_types=1);
-namespace Dezsidog\LYouzanphp\Events;
+namespace Dezsidog\Larazan\Events;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;

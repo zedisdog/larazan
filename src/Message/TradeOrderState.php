@@ -6,7 +6,7 @@
  * Time: 上午10:43
  */
 declare(strict_types=1);
-namespace Dezsidog\LYouzanphp\Message;
+namespace Dezsidog\Larazan\Message;
 
 use Carbon\Carbon;
 

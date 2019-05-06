@@ -3,7 +3,7 @@
  * Created by zed.
  */
 
-namespace Dezsidog\LYouzanphp\Consts;
+namespace Dezsidog\Larazan\Consts;
 
 
 class ItemType

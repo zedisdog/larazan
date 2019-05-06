@@ -3,7 +3,7 @@
  * Created by zed.
  */
 
-namespace Dezsidog\LYouzanphp;
+namespace Dezsidog\Larazan;
 
 
 use Dezsidog\Youzanphp\Api\Client;

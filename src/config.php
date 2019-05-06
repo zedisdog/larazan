@@ -14,12 +14,12 @@ return [
         'prefix' => 'api',
         'middlewares' => 'api',
         'url' => 'youzan-hook',
-        'action' => '\Dezsidog\LYouzanphp\Http\HookController'
+        'action' => '\Dezsidog\Larazan\Http\HookController'
     ],
     'callback' => [
         'prefix' => 'api',
         'middlewares' => 'api',
         'url' => 'youzan-callback',
-        'action' => '\Dezsidog\LYouzanphp\Http\CallbackController'
+        'action' => '\Dezsidog\Larazan\Http\CallbackController'
     ],
 ];

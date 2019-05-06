@@ -4,13 +4,13 @@
  */
 
 declare(strict_types=1);
-namespace Dezsidog\LYouzanphp;
+namespace Dezsidog\Larazan;
 
 
 use Carbon\Carbon;
-use Dezsidog\LYouzanphp\Exceptions\MethodNotFoundException;
-use Dezsidog\LYouzanphp\Exceptions\NoCacheException;
-use Dezsidog\LYouzanphp\Exceptions\NoStoreException;
+use Dezsidog\Larazan\Exceptions\MethodNotFoundException;
+use Dezsidog\Larazan\Exceptions\NoCacheException;
+use Dezsidog\Larazan\Exceptions\NoStoreException;
 use Dezsidog\Youzanphp\Api\Client;
 use Dezsidog\Youzanphp\Exceptions\BaseGatewayException;
 use Dezsidog\Youzanphp\Exceptions\TokenException;

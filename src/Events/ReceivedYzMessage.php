@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Dezsidog\LYouzanphp\Events;
+namespace Dezsidog\Larazan\Events;
 
 use Dezsidog\LYouzanphp\Message\BaseMessage;
 use Illuminate\Queue\SerializesModels;
