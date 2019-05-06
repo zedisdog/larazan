@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Dezsidog\Larazan\Events;
 
-use Dezsidog\LYouzanphp\Message\BaseMessage;
+use Dezsidog\Larazan\Message\BaseMessage;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
