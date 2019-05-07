@@ -139,7 +139,7 @@ class Manager
                 $this->exchangeTokenSilent();
             } elseif (!$this->store->get($refreshTokenKey)) {
                 if (!$this->dontReportAll) {
-                    throw new NoCacheException('specific shop has no cache');
+                    throw new NoCacheException('specific shop has no cache:' . $shopId);
                 } else {
                     $this->logger->warning('specific shop has no cache', ['shop_id' => $shopId]);
                 }
