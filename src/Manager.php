@@ -121,11 +121,13 @@ class Manager
     {
         return $this->shopId;
     }
+
     /**
      * @param int $shopId
+     * @param bool $refresh
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function setShopId(int $shopId)
+    public function setShopId(int $shopId, bool $refresh = false)
     {
         if (!$this->store && config('larazan.multiSeller')) {
             throw new NoStoreException('no store, no cache');
@@ -134,7 +136,7 @@ class Manager
         $tokenKey = $this->getTokenCacheKey();
         $refreshTokenKey = $this->getRefreshTokenCacheKey();
 
-        if (!$this->store->get($tokenKey)) {
+        if (!$this->store->get($tokenKey) || $refresh) {
             if (config('larazan.multiSeller') === false) {
                 $this->exchangeTokenSilent();
             } elseif (!$this->store->get($refreshTokenKey)) {
@@ -257,7 +259,7 @@ class Manager
                 if ($this->shopId) {
                     switch (get_class($e)) {
                         case TokenException::class:
-                            $this->setShopId($this->shopId);
+                            $this->setShopId($this->shopId, true);
                             return $this->client->$name(...$arguments);
                             break;
                         default:
