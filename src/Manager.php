@@ -143,7 +143,7 @@ class Manager
                 if (!$this->dontReportAll) {
                     throw new NoCacheException('specific shop has no cache:' . $shopId . ', refresh_token key:' . $refreshTokenKey);
                 } else {
-                    $this->logger->warning('specific shop has no cache', ['shop_id' => $shopId, 'refresh_token_key' => $refreshTokenKey]);
+                    $this->logger->warning('specific shop has no cache', ['shop_id' => $shopId, 'refresh_token_key' => $refreshTokenKey, 'stack' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 50)]);
                 }
             } else {
                 $this->exchangeTokenByRefreshToken($this->store->get($refreshTokenKey));
