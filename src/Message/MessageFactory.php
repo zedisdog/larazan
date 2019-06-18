@@ -29,7 +29,6 @@ class MessageFactory
                     \Log::warning("unsupported message <{$data['type']}>");
                 }
                 return null;
-//                throw new \InvalidArgumentException('unsupported message');
         }
     }
 }

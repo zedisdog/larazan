@@ -59,12 +59,21 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config.php', 'larazan');
 
         $router = $this->app->make('router');
-        $router->prefix(config('larazan.callback.prefix', 'api'))
-            ->middleware(config('larazan.callback.middlewares', 'api'))
-            ->any(config('larazan.callback.url', 'yz-callback'), config('larazan.callback.action'));
-        $router->prefix(config('larazan.hook.prefix', 'api'))
-            ->middleware(config('larazan.hook.middlewares'), 'api')
+        $router->prefix(config('larazan.callback.prefix'))
+            ->middleware(config('larazan.callback.middlewares'))
+            ->any(config('larazan.callback.url'), config('larazan.callback.action'));
+        $router->prefix(config('larazan.hook.prefix'))
+            ->middleware(config('larazan.hook.middlewares'))
             ->any(config('larazan.hook.url'), config('larazan.hook.action'));
+
+        if (config('larazan.ticket.enabled')) {
+            $router->prefix(config('larazan.ticket.notify.prefix'))
+                ->middleware(config('larazan.ticket.notify.middlewares'))
+                ->any(config('larazan.ticket.notify.url'), config('larazan.ticket.notify.action'));
+            $router->prefix(config('larazan.ticket.compensate.prefix'))
+                ->middleware(config('larazan.ticket.compensate.middlewares'))
+                ->any(config('larazan.ticket.compensate.url'), config('larazan.ticket.compensate.action'));
+        }
     }
 
     /**

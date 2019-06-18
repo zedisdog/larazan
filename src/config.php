@@ -22,4 +22,19 @@ return [
         'url' => 'youzan-callback',
         'action' => '\Dezsidog\Larazan\Http\CallbackController'
     ],
+    'ticket' => [
+        'enabled' => env('YZ_TICKET_ENABLED', false),
+        'notify' => [
+            'prefix' => 'api',
+            'middlewares' => 'api',
+            'url' => 'yz-ticket-notify',
+            'action' => '\Dezsidog\Larazan\Http\YzTicketNotifyController@notify'
+        ],
+        'compensate' => [
+            'prefix' => 'api',
+            'middlewares' => 'api',
+            'url' => 'yz-ticket-compensate',
+            'action' => '\Dezsidog\Larazan\Http\YzTicketNotifyController@compensate'
+        ],
+    ]
 ];
