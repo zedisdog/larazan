@@ -3,7 +3,7 @@
  * Created by zed.
  */
 
-namespace Dezsidog\LYouzanphp\Exceptions;
+namespace Dezsidog\Larazan\Exceptions;
 
 
 class MethodNotFoundException extends \RuntimeException

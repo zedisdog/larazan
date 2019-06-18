@@ -6,7 +6,7 @@
  * Time: 下午10:02
  */
 
-namespace Dezsidog\LYouzanphp\Message;
+namespace Dezsidog\Larazan\Message;
 use Carbon\Carbon;
 
 /**

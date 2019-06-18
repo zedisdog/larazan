@@ -4,29 +4,35 @@
  */
 
 declare(strict_types=1);
-namespace Dezsidog\LYouzanphp;
+namespace Dezsidog\Larazan;
 
 
 use Carbon\Carbon;
-use Dezsidog\LYouzanphp\Exceptions\MethodNotFoundException;
-use Dezsidog\LYouzanphp\Exceptions\NoCacheException;
-use Dezsidog\LYouzanphp\Exceptions\NoStoreException;
-use Dezsidog\Youzanphp\Client\Client;
+use Dezsidog\Larazan\Exceptions\MethodNotFoundException;
+use Dezsidog\Larazan\Exceptions\NoCacheException;
+use Dezsidog\Larazan\Exceptions\NoStoreException;
+use Dezsidog\Youzanphp\Api\Client;
 use Dezsidog\Youzanphp\Exceptions\BaseGatewayException;
 use Dezsidog\Youzanphp\Exceptions\TokenException;
 use Dezsidog\Youzanphp\Oauth2\Oauth;
 use Illuminate\Console\Application;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Contracts\Container\Container;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Manager
  * @package Dezsidog\LYouzanphp
+ * @method string getClientId()
+ * @method string getClientSecret()
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
  * @method bool|null pointIncrease(string $accountId, int $accountType, int $points, string $reason, string $bizValue = '', string $version = '3.1.0')
- * @method array|null getSalesman(string $mobile, int $fansType = 0, int $fansId = 0, string $version = '3.0.1')
+ * @method array|null getSalesman(string|int $identification, string $version = '3.0.1')
  * @method string|null getPhoneByTrade(string $tradeId, string $version = '3.0.0')
- * @method bool|null addTags(string $accountType, string $accountId, array $tags, string $version = '4.0.0')
+ * @method array|null addTags(int $id, string $tags, $version = '3.0.0')
+ * @method array|null itemSearch(string $keyword,int $pageNo = 1,int $pageSize = 100,int $showSoldOut = 2,$version = '3.0.0')
+ * @method array|null itemListByItemIds(array $item_ids,int $page_no = 1,int $page_size = 100,int $show_sold_out = 2,$version = '3.0.0')
+ * @method bool|null addCostumerTags(string $accountType, string $accountId, array $tags, string $version = '4.0.0')
  * @method array|null getOpenIdByPhone(string $mobile, string $countryCode = '86', string $version = '3.0.0')
  * @method array|null getShopInfo(string $version = '3.0.0')
  * @method array|null getItemCategories(string $version = '3.0.0')
@@ -71,12 +77,21 @@ class Manager
      * @var int
      */
     protected $shopId;
+    /**
+     * @var bool
+     */
+    protected $dontReportAll;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Manager constructor.
      * @param Container $app
      * @param Client $client
      * @param Oauth $oauth
+     * @param int $shopId
      * @param Store|null $store
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -86,36 +101,62 @@ class Manager
         $this->store = $store;
         $this->client = $client;
         $this->oauthClient = $oauth;
+        $this->logger = $this->app->make('log');
         if ($shopId) {
             $this->setShopId($shopId);
         }
         $this->refreshTokenExpires = config('larazan.refreshTokenExpires');
     }
 
+    public function dontReportAll()
+    {
+        $this->dontReportAll = true;
+        $this->client->dontReportAll();
+    }
+
+    /**
+     * @return int
+     */
+    public function getShopId(): int
+    {
+        return $this->shopId;
+    }
+
     /**
      * @param int $shopId
+     * @param bool $refresh
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function setShopId(int $shopId)
+    public function setShopId(int $shopId, bool $refresh = false)
     {
         if (!$this->store && config('larazan.multiSeller')) {
             throw new NoStoreException('no store, no cache');
         }
-        $this->shopId = $shopId;
-        $tokenKey = $this->getTokenCacheKey($shopId);
-        $refreshTokenKey = $this->getRefreshTokenCacheKey($shopId);
+        $this->shopId = intval($shopId);
+        $tokenKey = $this->getTokenCacheKey();
+        $refreshTokenKey = $this->getRefreshTokenCacheKey();
 
-        if (!$this->store->get($tokenKey)) {
+        if (!$this->store->get($tokenKey) || $refresh) {
             if (config('larazan.multiSeller') === false) {
                 $this->exchangeTokenSilent();
             } elseif (!$this->store->get($refreshTokenKey)) {
-                throw new NoCacheException('specific shop has no cache');
+                if (!$this->dontReportAll) {
+                    throw new NoCacheException('specific shop has no cache:' . $shopId . ', refresh_token key:' . $refreshTokenKey);
+                } else {
+                    $this->logger->warning('specific shop has no cache', ['shop_id' => $shopId, 'refresh_token_key' => $refreshTokenKey, 'stack' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 50)]);
+                }
             } else {
                 $this->exchangeTokenByRefreshToken($this->store->get($refreshTokenKey));
             }
         } else {
             $this->client->setAccessToken($this->store->get($tokenKey));
         }
+    }
+
+    public function getAccessToken()
+    {
+        $tokenKey = $this->getTokenCacheKey();
+        return $this->store->get($tokenKey);
     }
 
     /**
@@ -141,6 +182,7 @@ class Manager
             $redirectUri = config('larazan.redirectUri');
         }
         $token = $this->oauthClient->requestToken($code, $redirectUri);
+        $this->shopId = intval($token['authority_id']);
         if ($this->store) {
             $this->cacheToken($token);
         }
@@ -154,6 +196,7 @@ class Manager
      */
     public function exchangeTokenByRefreshToken(string $refreshToken) {
         $token = $this->oauthClient->refreshToken($refreshToken);
+        $this->shopId = intval($token['authority_id']);
         if ($this->store) {
             $this->cacheToken($token);
         }
@@ -162,10 +205,12 @@ class Manager
 
     /**
      * @param array|null $token
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function cacheToken(?array $token)
     {
+        if (!$token) {
+            $this->logger->warning('no token data received');
+        }
         // 自用型授权没有refresh_token
         if ($this->app->version() < '5.8') {
             $token['expires'] = intval($token['expires']/1000/60);
@@ -178,8 +223,8 @@ class Manager
                 $token['refresh_expires'] = $this->refreshTokenExpires/60;
             }
         }
-        $tokenKey = $this->getTokenCacheKey($token['authority_id']);
-        $refreshTokenKey = $this->getRefreshTokenCacheKey($token['authority_id']);
+        $tokenKey = $this->getTokenCacheKey();
+        $refreshTokenKey = $this->getRefreshTokenCacheKey();
 
         $this->store->put($tokenKey, $token['access_token'], $token['expires']);
         if (config('larazan.multiSeller')) {
@@ -187,14 +232,16 @@ class Manager
         }
     }
 
-    public function getTokenCacheKey(int $shopId): string
+    public function getTokenCacheKey(): string
     {
-        return sprintf('%s.token.%s', self::TOKEN_CACHE_BASE_KEY, $shopId);
+        // 根据client id 分组 支持多应用
+        return sprintf('%s.%s.token.%s', $this->oauthClient->getClientId(), self::TOKEN_CACHE_BASE_KEY, $this->shopId);
     }
 
-    public function getRefreshTokenCacheKey(int $shopId): string
+    public function getRefreshTokenCacheKey(): string
     {
-        return sprintf('%s.refresh_token.%s', self::TOKEN_CACHE_BASE_KEY, $shopId);
+        // 根据client id 分组 支持多应用
+        return sprintf('%s.%s.refresh_token.%s', $this->oauthClient->getClientId(), self::TOKEN_CACHE_BASE_KEY, $this->shopId);
     }
 
     /**
@@ -212,7 +259,7 @@ class Manager
                 if ($this->shopId) {
                     switch (get_class($e)) {
                         case TokenException::class:
-                            $this->setShopId($this->shopId);
+                            $this->setShopId($this->shopId, true);
                             return $this->client->$name(...$arguments);
                             break;
                         default:
@@ -222,6 +269,8 @@ class Manager
                     throw $e;
                 }
             }
+        } elseif (method_exists($this->oauthClient, $name)) {
+            return $this->oauthClient->$name(...$arguments);
         } else {
             throw new MethodNotFoundException(sprintf('method [%s] with params [%s] not found', $name, implode(',', $arguments)));
         }

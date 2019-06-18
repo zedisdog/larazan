@@ -6,7 +6,7 @@
  * Time: 下午6:55
  */
 
-namespace Dezsidog\LYouzanphp\Message;
+namespace Dezsidog\Larazan\Message;
 
 class MessageFactory
 {

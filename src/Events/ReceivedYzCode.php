@@ -1,30 +1,33 @@
 <?php
+/**
+ * Created by zed.
+ */
+
 declare(strict_types=1);
 namespace Dezsidog\Larazan\Events;
 
-use Dezsidog\Larazan\Message\BaseMessage;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class ReceivedYzMessage
+class ReceivedYzCode
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @var BaseMessage
+     * @var string
      */
-    public $message;
+    public $code;
 
     /**
      * Create a new event instance.
      *
-     * @param BaseMessage $message
+     * @param string $code
      */
-    public function __construct(BaseMessage $message)
+    public function __construct(string $code)
     {
-        $this->message = $message;
+        $this->code = $code;
     }
 
     /**

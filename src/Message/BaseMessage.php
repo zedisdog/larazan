@@ -6,7 +6,7 @@
  * Time: 下午5:42
  */
 declare(strict_types=1);
-namespace Dezsidog\LYouzanphp\Message;
+namespace Dezsidog\Larazan\Message;
 
 
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;

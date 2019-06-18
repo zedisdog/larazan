@@ -6,11 +6,11 @@
  * Time: 上午9:50
  */
 
-namespace Dezsidog\LYouzanphp\Http;
+namespace Dezsidog\Larazan\Http;
 
 
-use Dezsidog\LYouzanphp\Events\ReceivedYzMessage;
-use Dezsidog\LYouzanphp\Message\MessageFactory;
+use Dezsidog\Larazan\Events\ReceivedYzMessage;
+use Dezsidog\Larazan\Message\MessageFactory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -21,7 +21,7 @@ class HookController extends Controller
      * @return string
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function handler(Request $request)
+    public function __invoke(Request $request)
     {
         $log = app()->make('log');
         $log->info('yz-message-receive', $request->input() ?? []);

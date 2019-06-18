@@ -3,34 +3,41 @@
  * Created by zed.
  */
 
-namespace Dezsidog\LYouzanphp;
+namespace Dezsidog\Larazan;
 
 
-use Dezsidog\Youzanphp\Client\Client;
+use Dezsidog\Youzanphp\Api\Client;
 use Dezsidog\Youzanphp\Oauth2\Oauth;
 use Illuminate\Foundation\Application;
-use Illuminate\Routing\Router;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    /**
-     * 标记着提供器是延迟加载的
-     *
-     * @var bool
-     */
-    protected $defer = true;
+//    /**
+//     * 标记着提供器是延迟加载的
+//     *
+//     * @var bool
+//     */
+//    protected $defer = true;
 
     public function register()
     {
-        $this->app->singleton(Manager::class,function(Application $app){
-            $oauth = new Oauth(config('larazan.clientId'), config('larazan.clientSecret'));
-            $client = new Client();
-            if (config('larazan.multiSeller')) {
-                return new Manager($app, $client, $oauth);
+        $this->app->bind(Manager::class,function(Application $app, array $config = []){
+            $defaultConfig = [
+                'clientId' => config('larazan.clientId'),
+                'clientSecret' => config('larazan.clientSecret'),
+                'kdtId' => config('larazan.kdtId'),
+                'multiSeller' => config('larazan.multiSeller')
+            ];
+            $config = array_merge($defaultConfig, $config);
+            $oauth = new Oauth($config['clientId'], $config['clientSecret'], $app->make('log'));
+            $client = new Client('', $app->make('log'));
+            if ($config['multiSeller']) {
+                return new Manager($app, $client, $oauth, 0, $app->make('cache')->getStore());
             } else {
-                return new Manager($app, $client, $oauth, config('larazan.kdtId'));
+                return new Manager($app, $client, $oauth, $config['kdtId'], $app->make('cache')->getStore());
             }
         });
+        $this->app->alias(Manager::class, 'larazan');
     }
 
     /**
@@ -46,11 +53,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config.php', 'larazan');
 
         $router = $this->app->make('router');
-//        if (config('larazan.callback')) {
-//            $router->prefix(config('larazan.callback.prefix', 'api'))
-//                ->middleware(config('larazan.callback.middlewares', 'api'))
-//                ->any(config('larazan.callback.url', 'yz-callback'), config('larazan.callback.class'));
-//        }
+        $router->prefix(config('larazan.callback.prefix', 'api'))
+            ->middleware(config('larazan.callback.middlewares', 'api'))
+            ->any(config('larazan.callback.url', 'yz-callback'), config('larazan.callback.action'));
         $router->prefix(config('larazan.hook.prefix', 'api'))
             ->middleware(config('larazan.hook.middlewares'), 'api')
             ->any(config('larazan.hook.url'), config('larazan.hook.action'));
