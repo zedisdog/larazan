@@ -8,6 +8,7 @@ namespace Dezsidog\Larazan;
 
 use Dezsidog\Youzanphp\Api\Client;
 use Dezsidog\Youzanphp\Oauth2\Oauth;
+use Dezsidog\Youzanphp\Sec\Decrypter;
 use Illuminate\Foundation\Application;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -38,6 +39,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             }
         });
         $this->app->alias(Manager::class, 'larazan');
+
+        $this->app->bind(Decrypter::class, function(Application $app, array $config = []){
+            $secret = $config['secret'] ?? config('larazan.clientSecret');
+            return new Decrypter($secret);
+        });
     }
 
     /**
