@@ -25,6 +25,7 @@ use Psr\Log\LoggerInterface;
  * @package Dezsidog\LYouzanphp
  * @method string getClientId()
  * @method string getClientSecret()
+ * @method array|null refund(string $desc, string $oid, int $refundFee, string $tid, string $version = '3.0.0')
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
  * @method bool|null pointIncrease(string $accountId, int $accountType, int $points, string $reason, string $bizValue = '', string $version = '3.1.0')
  * @method array|null getSalesman(string|int $identification, string $version = '3.0.1')
@@ -94,6 +95,7 @@ class Manager
      * @param int $shopId
      * @param Store|null $store
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(Container $app, Client $client, Oauth $oauth, int $shopId = 0, ?Store $store = null)
     {
