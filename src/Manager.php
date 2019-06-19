@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
  * @method string getClientSecret()
  * @method array|null refund(string $desc, string $oid, int $refundFee, string $tid, string $version = '3.0.0')
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
+ * @method bool|null ticketCreate(string $tickets, string $orderNo, int $singleNum = 1, string $version = '1.0.0')
  * @method bool|null pointIncrease(string $accountId, int $accountType, int $points, string $reason, string $bizValue = '', string $version = '3.1.0')
  * @method array|null getSalesman(string|int $identification, string $version = '3.0.1')
  * @method string|null getPhoneByTrade(string $tradeId, string $version = '3.0.0')
