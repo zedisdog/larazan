@@ -35,7 +35,7 @@ class TicketNotifyController extends Controller
     {
         Log::info('order.compensate', $request->input());
 
-        $result = event(new ReceivedYzTicketCompensateMessage($request->input('orderNo')));
+        $result = event(new ReceivedYzTicketCompensateMessage($request->input('orderNo'), $request->input('kdtId')));
 
         $last = array_pop($result);
 
