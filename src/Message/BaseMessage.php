@@ -101,7 +101,7 @@ abstract class BaseMessage
 
     public function setAttribute($key, $value)
     {
-        $key = snake_case($key);
+        $key = \Str::snake($key);
         return $this->baseSetAttribute($key, $value);
     }
 

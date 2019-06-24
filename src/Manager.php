@@ -25,7 +25,10 @@ use Psr\Log\LoggerInterface;
  * @package Dezsidog\LYouzanphp
  * @method string getClientId()
  * @method string getClientSecret()
+ * @method array|null refund(string $desc, string $oid, int $refundFee, string $tid, string $version = '3.0.0')
+ * @method bool|null ticketVerify(array $params, $version = '1.0.0')
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
+ * @method bool|null ticketCreate(string $tickets, string $orderNo, int $singleNum = 1, string $version = '1.0.0')
  * @method bool|null pointIncrease(string $accountId, int $accountType, int $points, string $reason, string $bizValue = '', string $version = '3.1.0')
  * @method array|null getSalesman(string|int $identification, string $version = '3.0.1')
  * @method string|null getPhoneByTrade(string $tradeId, string $version = '3.0.0')
@@ -94,6 +97,7 @@ class Manager
      * @param int $shopId
      * @param Store|null $store
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(Container $app, Client $client, Oauth $oauth, int $shopId = 0, ?Store $store = null)
     {
@@ -242,6 +246,18 @@ class Manager
     {
         // 根据client id 分组 支持多应用
         return sprintf('%s.%s.refresh_token.%s', $this->oauthClient->getClientId(), self::TOKEN_CACHE_BASE_KEY, $this->shopId);
+    }
+
+    /**
+     * @param string $push_url
+     * @param string $compensate_url
+     * @param string $provider
+     * @return array|bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function ticketBind(string $push_url, string $compensate_url, string $provider = 'STANDARD')
+    {
+        return $this->client->ticketBind($push_url, $compensate_url, strval($this->shopId), $provider);
     }
 
     /**
