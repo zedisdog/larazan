@@ -18,15 +18,18 @@ class ReceivedYzTicketCompensateMessage
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $trade_id;
+    public $shop_id;
 
     /**
      * Create a new event instance.
      *
-     * @param array $data
+     * @param string $trade_id
+     * @param string $shop_id
      */
-    public function __construct(string $trade_id)
+    public function __construct(string $trade_id, string $shop_id)
     {
         $this->trade_id = $trade_id;
+        $this->shop_id = $shop_id;
     }
 
     /**
