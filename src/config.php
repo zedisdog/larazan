@@ -28,13 +28,13 @@ return [
             'prefix' => 'api',
             'middlewares' => 'api',
             'url' => 'yz-ticket-notify',
-            'action' => '\Dezsidog\Larazan\Http\YzTicketNotifyController@notify'
+            'action' => '\Dezsidog\Larazan\Http\TicketNotifyController@notify'
         ],
         'compensate' => [
             'prefix' => 'api',
             'middlewares' => 'api',
             'url' => 'yz-ticket-compensate',
-            'action' => '\Dezsidog\Larazan\Http\YzTicketNotifyController@compensate'
+            'action' => '\Dezsidog\Larazan\Http\TicketNotifyController@compensate'
         ],
     ]
 ];

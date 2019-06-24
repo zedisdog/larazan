@@ -6,8 +6,9 @@ use Dezsidog\Larazan\Events\ReceivedYzTicketCompensateMessage;
 use Dezsidog\Larazan\Events\ReceivedYzTicketMessage;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-class YzTicketNotifyController extends Controller
+class TicketNotifyController extends Controller
 {
     /**
      * 处理有赞门票交易推送
@@ -16,7 +17,7 @@ class YzTicketNotifyController extends Controller
      */
     public function notify(Request $request)
     {
-        \Log::info('order.request', $request->input());
+        Log::info('order.request', $request->input());
 
         event(new ReceivedYzTicketMessage($request->input()));
 
@@ -32,12 +33,24 @@ class YzTicketNotifyController extends Controller
      */
     public function compensate(Request $request)
     {
-        \Log::info('order.compensate', $request->input());
+        Log::info('order.compensate', $request->input());
 
-        event(new ReceivedYzTicketCompensateMessage($request->input('orderNo')));
+        $result = event(new ReceivedYzTicketCompensateMessage($request->input('orderNo')));
 
-        return json_encode([
-            'success' => true
-        ]);
+        $last = array_pop($result);
+
+        if(is_string($last)) {
+            $res = $last;
+        } elseif (is_array($last)) {
+            $res = json_encode($last);
+        } else {
+            $res = json_encode([
+                'success' => false
+            ]);
+        }
+
+        Log::info('order.compensate.result', [$res]);
+
+        return $res;
     }
 }
