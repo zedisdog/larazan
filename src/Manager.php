@@ -249,6 +249,18 @@ class Manager
     }
 
     /**
+     * @param string $push_url
+     * @param string $compensate_url
+     * @param string $provider
+     * @return array|bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function ticketBind(string $push_url, string $compensate_url, string $provider = 'STANDARD')
+    {
+        return $this->client->ticketBind($push_url, $compensate_url, strval($this->shopId), $provider);
+    }
+
+    /**
      * @param $name
      * @param $arguments
      * @return mixed
