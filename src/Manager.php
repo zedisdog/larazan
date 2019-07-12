@@ -257,7 +257,7 @@ class Manager
      */
     public function ticketBind(string $push_url, string $compensate_url, string $provider = 'STANDARD')
     {
-        return $this->client->ticketBind($push_url, $compensate_url, strval($this->shopId), $provider);
+        return $this->client->ticketBind($push_url, $compensate_url, $provider);
     }
 
     /**
