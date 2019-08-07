@@ -10,6 +10,7 @@ namespace Dezsidog\Larazan\Message;
 
 
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
+use Illuminate\Support\Str;
 
 /**
  * Class BaseMessage
@@ -101,7 +102,7 @@ abstract class BaseMessage
 
     public function setAttribute($key, $value)
     {
-        $key = \Str::snake($key);
+        $key = Str::snake($key);
         return $this->baseSetAttribute($key, $value);
     }
 

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Dezsidog\Larazan\Message;
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 /**
  * 有赞推送消息
@@ -101,5 +102,14 @@ class TradeOrderState extends BaseMessage
     public function getTypeAttribute()
     {
         return BaseMessage::TRADE_ORDER_STATE;
+    }
+
+    public function getStatusAttribute()
+    {
+        if ($this->attributes['status']) {
+            return $this->attributes['status'];
+        } else {
+            return Arr::get($this->attributes, 'msg.full_order_info.order_info.status');
+        }
     }
 }
