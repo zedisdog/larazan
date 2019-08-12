@@ -25,6 +25,7 @@ use Psr\Log\LoggerInterface;
  * @package Dezsidog\LYouzanphp
  * @method string getClientId()
  * @method string getClientSecret()
+ * @method bool addSalesmanAccount($identification,int $fans_type = 0,string $from_mobile = '',int $level = 0,int $group_id = 0,string $version = '3.0.1')
  * @method array|null refund(string $desc, string $oid, int $refundFee, string $tid, string $version = '3.0.0')
  * @method bool|null ticketVerify(array $params, $version = '1.0.0')
  * @method array|null getTrade(string $tid, string $version = '4.0.0')
