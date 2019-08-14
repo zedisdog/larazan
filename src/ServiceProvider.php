@@ -14,7 +14,7 @@ use Illuminate\Foundation\Application;
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 //    /**
-//     * 标记着提供器是延迟加载的
+//     * 标记则提供器是延迟加载的
 //     *
 //     * @var bool
 //     */
