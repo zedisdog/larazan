@@ -56,6 +56,8 @@ use Psr\Log\LoggerInterface;
  * @method array|null getFollower($id, string $version='3.0.0') 通过 open_id 或者 fans_id 获取用户信息
  * @method bool itemUpdate(array $params, string $version = '3.0.1') 更新商品
  * @method array|null itemCreate(array $params, string $version = '3.0.1') 创建商品
+ * @method array|null uploadImage(string $filename, string $version = '3.0.0') 上传图片
+ * @method array|null getTags(bool $isSort = false, string $version = '3.0.0') 获取分组
  */
 class Manager
 {
