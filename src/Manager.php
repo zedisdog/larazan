@@ -60,6 +60,8 @@ use Psr\Log\LoggerInterface;
  * @method array|null getTags(bool $isSort = false, string $version = '3.0.0') 获取分组
  * @method bool|null logisticsUpdate(array $param, string $version = '3.0.1') 更新物流信息
  * @method array|null logisticsConfirm(array $param, string $version = '3.0.0') 确认发货接口
+ * @method array|null expressGet(string $version = '3.0.0') 获取快递公司列表
+ * @method array|null queryDcByOrderNo(string $tid, array $options = [], string $kdt_id = '', string $version = '1.0.0') 快递单查询
  */
 class Manager
 {
