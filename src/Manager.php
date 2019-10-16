@@ -58,6 +58,8 @@ use Psr\Log\LoggerInterface;
  * @method array|null itemCreate(array $params, string $version = '3.0.1') 创建商品
  * @method array|null uploadImage(string $filename, string $version = '3.0.0') 上传图片
  * @method array|null getTags(bool $isSort = false, string $version = '3.0.0') 获取分组
+ * @method bool|null logisticsUpdate(array $param, string $version = '3.0.1') 更新物流信息
+ * @method array|null logisticsConfirm(array $param, string $version = '3.0.0') 确认发货接口
  */
 class Manager
 {
