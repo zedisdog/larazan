@@ -62,6 +62,7 @@ use Psr\Log\LoggerInterface;
  * @method array|null logisticsConfirm(array $param, string $version = '3.0.0') 确认发货接口
  * @method array|null expressGet(string $version = '3.0.0') 获取快递公司列表
  * @method array|null queryDcByOrderNo(string $tid, array $options = [], string $kdt_id = '', string $version = '1.0.0') 快递单查询
+ * @method array|null logisticsTemplateGet(int $page_no, int $page_size = 20, string $version = '3.0.0') 运费模板查询
  */
 class Manager
 {
