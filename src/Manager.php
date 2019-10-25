@@ -63,6 +63,7 @@ use Psr\Log\LoggerInterface;
  * @method array|null expressGet(string $version = '3.0.0') 获取快递公司列表
  * @method array|null queryDcByOrderNo(string $tid, array $options = [], string $kdt_id = '', string $version = '1.0.0') 快递单查询
  * @method array|null logisticsTemplateGet(int $page_no, int $page_size = 20, string $version = '3.0.0') 运费模板查询
+ * @method int logisticsFee(string $order_no, string $province_name, string $city_name, string $county_name, array $item_param_list, string $version = '3.0.0') 计算运费
  */
 class Manager
 {
