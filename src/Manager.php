@@ -66,6 +66,10 @@ use Psr\Log\LoggerInterface;
  * @method int logisticsFee(string $order_no, string $province_name, string $city_name, string $county_name, array $item_param_list, string $version = '3.0.0') 计算运费
  * @method array|null salesmanTrades(array $params, $version = '3.0.1') 获取分销员订单
  * @method array|null getRefund($refund_id, $version = '3.0.0') 获取退款详情(youzan.trade.refund.get)
+ * @method bool agreeRefund(string $refund_id, $version, string $api_version = '3.0.0') 商家同意退款
+ * @method bool returnGoodsRefuse(string $remark, string $refund_id, $version, string $api_version = '3.0.0') 商家拒绝退货
+ * @method bool returnGoodsAgree(string $refund_id, string $version, string $address, string $post, string $mobile, string $name, string $remark = '', string $tel = '', string $api_version = '3.0.0') 商家同意退货
+ * @method bool refuseRefund(string $remark, string $refund_id, $version, $api_version = '3.0.0') 商家拒绝退款
  */
 class Manager
 {
