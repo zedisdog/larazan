@@ -68,7 +68,7 @@ use Psr\Log\LoggerInterface;
  * @method array|null getRefund($refund_id, $version = '3.0.0') 获取退款详情(youzan.trade.refund.get)
  * @method bool agreeRefund(string $refund_id, $version, string $api_version = '3.0.0') 商家同意退款
  * @method bool returnGoodsRefuse(string $remark, string $refund_id, $version, string $api_version = '3.0.0') 商家拒绝退货
- * @method bool returnGoodsAgree(string $refund_id, string $version, string $address, string $post, string $mobile, string $name, string $remark = '', string $tel = '', string $api_version = '3.0.0') 商家同意退货
+ * @method bool returnGoodsAgree(string $refund_id, string $version, string $address, string $mobile, string $name, string $remark = '', string $tel = '', string $post = '', string $api_version = '3.0.0') 商家同意退货
  * @method bool refuseRefund(string $remark, string $refund_id, $version, $api_version = '3.0.0') 商家拒绝退款
  */
 class Manager
