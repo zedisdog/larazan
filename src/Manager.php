@@ -219,12 +219,12 @@ class Manager
         if ($this->app->version() < '5.8') {
             $token['expires'] = intval($token['expires']/1000/60);
             if (config('larazan.multiSeller')) {
-                $token['refresh_expires'] = $this->refreshTokenExpires;
+                $token['refresh_expires'] = $this->refreshTokenExpires/60;
             }
         } else {
             $token['expires'] = intval($token['expires']/1000);
             if (config('larazan.multiSeller')) {
-                $token['refresh_expires'] = $this->refreshTokenExpires/60;
+                $token['refresh_expires'] = $this->refreshTokenExpires;
             }
         }
         $tokenKey = $this->getTokenCacheKey();
