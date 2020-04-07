@@ -70,6 +70,7 @@ use Psr\Log\LoggerInterface;
  * @method bool returnGoodsRefuse(string $remark, string $refund_id, $version, string $api_version = '3.0.0') 商家拒绝退货
  * @method bool returnGoodsAgree(string $refund_id, string $version, string $address, string $mobile, string $name, string $tel = '', string $remark = '', string $post = '', string $api_version = '3.0.0') 商家同意退货
  * @method bool refuseRefund(string $remark, string $refund_id, $version, $api_version = '3.0.0') 商家拒绝退款
+ * @method array|null chainDescendentList($page_num = 1, $page_size = 15, string $version = '1.0.0') 连锁版查询下级店铺
  */
 class Manager
 {
