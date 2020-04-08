@@ -26,6 +26,11 @@ class Order
      */
     public $outer_sku_id;
 
+    /**
+     * @var int 子订单id
+     */
+    public $oid;
+
     public function __construct(array $order_data)
     {
         foreach ($order_data as $key => $value) {
