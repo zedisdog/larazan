@@ -4,6 +4,7 @@
 namespace Dezsidog\Larazan\Message;
 
 
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 
 /**
@@ -18,6 +19,7 @@ use Illuminate\Support\Arr;
  * @property-read string $delivery_province 收货省
  * @property-read string $delivery_city 收货市
  * @property-read string $delivery_district 收货区
+ * @property-read Carbon|null $pay_time 支付时间
  */
 class TradeNormal extends BaseMessageWithControlInfo
 {
@@ -47,6 +49,9 @@ class TradeNormal extends BaseMessageWithControlInfo
                 return Arr::get($this->msg, 'full_order_info.address_info.delivery_city');
             case 'delivery_district':
                 return Arr::get($this->msg, 'full_order_info.address_info.delivery_district');
+            case 'payment_time':
+                $time = Arr::get($this->msg, 'full_order_info.order_info.pay_time');
+                return $time ? new Carbon($time) : null;
             default:
                 throw new \Exception('no prop');
         }
