@@ -9,6 +9,7 @@
 namespace Dezsidog\Larazan\Http;
 
 
+use Dezsidog\Larazan\EventFactory;
 use Dezsidog\Larazan\Events\ReceivedYzMessage;
 use Dezsidog\Larazan\Message\MessageFactory;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class HookController extends Controller
         $log = app()->make('log');
         $log->info('yz-message-receive', $request->input() ?? []);
         if ($request->has('type')) {
+            EventFactory::fire($request->input());
             $message = MessageFactory::create($request->input());
             if ($message) {
                 event(new ReceivedYzMessage($message));

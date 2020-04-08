@@ -8,6 +8,8 @@
 
 namespace Dezsidog\Larazan\Message;
 
+use Illuminate\Support\Facades\Log;
+
 class MessageFactory
 {
     public static function create($data)
@@ -25,8 +27,8 @@ class MessageFactory
             case 'COUPON_CUSTOMER_PROMOTION':
                 return new Coupon($data);
             default:
-                if (class_exists(\Log::class)) {
-                    \Log::warning("unsupported message <{$data['type']}>");
+                if (class_exists(Log::class)) {
+                    Log::warning("unsupported message <{$data['type']}>");
                 }
                 return null;
         }
