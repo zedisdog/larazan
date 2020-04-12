@@ -11,7 +11,7 @@
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
-        "dezsidog/youzanphp": "^0.7.0",
+        "dezsidog/youzanphp": "^0.8.0",
         "laravel/framework": "~5.6 | ^6.0 | ^7.0"
     },
     "autoload": {
