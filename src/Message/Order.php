@@ -31,6 +31,11 @@ class Order
      */
     public $oid;
 
+    /**
+     * @var int 有赞商品id
+     */
+    public $item_id;
+
     public function __construct(array $order_data)
     {
         foreach ($order_data as $key => $value) {
