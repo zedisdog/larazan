@@ -53,7 +53,7 @@ class TradeNormal extends BaseMessageWithControlInfo
                 $time = Arr::get($this->msg, 'full_order_info.order_info.pay_time');
                 return $time ? new Carbon($time) : null;
             default:
-                throw new \Exception('no prop');
+                return parent::__get($name);
         }
     }
 }

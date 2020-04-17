@@ -4,21 +4,21 @@
 namespace Dezsidog\Larazan\Events;
 
 
-use Dezsidog\Larazan\Message\TradeNormal;
+use Dezsidog\Larazan\Message\RefundNormal;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ReceivedTradePaid
+class RefundSellerAgree
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @var TradeNormal
+     * @var RefundNormal
      */
     public $message;
 
-    public function __construct(TradeNormal $message)
+    public function __construct(RefundNormal $message)
     {
         $this->message = $message;
     }

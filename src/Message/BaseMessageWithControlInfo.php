@@ -116,4 +116,9 @@ class BaseMessageWithControlInfo
         }
         $this->msg = $data;
     }
+
+    public function __get($name)
+    {
+        return Arr::get($this->msg, $name);
+    }
 }
