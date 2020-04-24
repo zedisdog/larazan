@@ -49,7 +49,7 @@ class TradeNormal extends BaseMessageWithControlInfo
                 return Arr::get($this->msg, 'full_order_info.address_info.delivery_city');
             case 'delivery_district':
                 return Arr::get($this->msg, 'full_order_info.address_info.delivery_district');
-            case 'payment_time':
+            case 'pay_time':
                 $time = Arr::get($this->msg, 'full_order_info.order_info.pay_time');
                 return $time ? new Carbon($time) : null;
             default:
