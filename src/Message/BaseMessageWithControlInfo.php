@@ -107,7 +107,7 @@ class BaseMessageWithControlInfo
     protected function setMsg($value)
     {
         $data = json_decode(urldecode($value), true);
-        if(Arr::exists($data, 'full_order_info.orders')){
+        if(Arr::has($data, 'full_order_info.orders')){
             $orders = [];
             foreach (Arr::get($data, 'full_order_info.orders') as $order_data) {
                 $orders[] = new Order($order_data);
